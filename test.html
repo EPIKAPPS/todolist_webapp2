@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <style>
+        body {
+            /*             display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif; */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #d7f0db;
+        }
+
+        #todo-container {
+            width: 300px;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        #bg_historial {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgba(128, 128, 128, 0.5);
+            /* Gris transparente */
+            position: absolute;
+            visibility: hidden;
+            backdrop-filter: blur(10px);
+            /* Aplicar desenfoque */
+        }
+
+        .over_box {
+            min-width: 300px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            color: rgb(55, 255, 108);
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            visibility: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: fit-content;
+            position: relative;
+            padding-right: 5px;
+        }
+
+        .container_h {
+            width: 300px;
+        }
+
+        .button {
+            width: fit-content;
+            margin-left: auto;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn_eliminar {
+            width: fit-content;
+            height: 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            margin: 10px;
+            margin-right: 40%;
+        }
+
+        .btn_trash_bin {
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-image: url('img/delete_7376062.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            /* Ajustar el tamaño de la imagen al botón */
+        }
+
+        .btn_container {
+            width: 40px;
+            height: 30px;
+            align-items: center;
+            line-height: .2;
+            padding: 5px;
+            position: relative;
+            margin-left: 10px;
+            border: 1px dashed lightgray;
+            top: 0;
+            left: 0;
+            background: #89e24a;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .btn_container2 {
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            padding: 5px;
+            position: relative;
+            margin-left: 80%;   
+            border: 1px dashed lightgray;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .btn_hover:hover {
+            background-color: rgb(255, 186, 117);
+        }
+
+        #btn_hist {
+            width: 5px;
+            height: 5px;
+            list-style: none;
+            padding: 10px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            background-image: url("img/expediente.png"); /* Imagen tomada de: "https://www.flaticon.es/iconos-gratis/historico" */
+            transform: translate(-50%, -50%);
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+        }
+
+        .btn_rounded_x {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            border: none;
+            top: 0;
+            left: 0;
+            margin-left: auto;
+            border-radius: 20%;
+            background-image: url('img/cross_8371367.png'); /* Imagen tomada de: https://www.freepik.com/icon/cross_8371367#fromView=search&term=cerrar&page=1&position=8&track=ais */
+            background-size: cover;
+            /* Ajustar el tamaño de la imagen al botón */
+        }
+
+        .title {
+            margin: -5px 0 -5px 0;
+            font-family: 'Cursiva';
+        }
+
+        hr {
+            margin-bottom: 30px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            line-height: 3;
+            align-items: center;
+            margin-bottom: 8px;
+            display: flex;
+            width: 100%;
+        }
+
+
+
+        input[type="text"] {
+            width: 65%;
+            margin: 0 0px 0 5px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            display: inline;
+        }
+
+        span {
+            min-width: 35px;
+            padding-left: 10px;
+            width: 100%;
+            border: 1px solid #f2f2f2;
+            cursor: pointer;
+        }
+
+        span:hover {
+            background-image: linear-gradient(to right, #89e24a, transparent);
+        }
+
+        .span_h {
+            color: #af4c54;
+        }
+
+
+        #historial {
+            display: none;
+            margin-top: 10px;
+            margin-bottom: 50px;
+        }
+
+        .notificacion {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+
+        /* Agrega animación de entrada y salida */
+        @keyframes fadeInOut {
+            0% {
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .notificacion.mostrar {
+            animation: fadeInOut 4s ease-out;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    
+    <div id="todo-container">
+
+        <div class="btn_container2 btn_hover" onclick="toggleHistorial()"><div id="btn_hist" class="button"></div></div>
+        
+        <h2 class="title">Tareas</h2>
+        <hr>
+
+        <div class="container">
+
+            <input type="text" id="taskInput" placeholder="Agregar nueva tarea">
+
+            <button class="button" onclick="addTask()">Agregar</button>
+
+        </div>
+
+        <div class="container_h">
+
+            <ul id="taskList"></ul>
+
+
+        </div>
+
+    </div>
+
+    <div id="bg_historial">
+
+        <div class="over_box">
+
+            <div class="container">
+
+                <button onclick="toggleHistorial()" class="btn_rounded_x"></button>
+            </div>
+
+            <div class="container">
+
+                <h3>Historial</h3>
+
+            </div>
+
+            <ul id="historial"></button></ul>
+
+            <button onclick="eliminaHistorial()" class="btn_eliminar">Eliminar</button>
+
+        </div>
+
+    </div>
+
+    <script>
+        const taskList = document.getElementById('taskList');
+        const historialList = document.getElementById('historial');
+        const taskInput = document.getElementById('taskInput');
+
+
+        function addTask() {
+
+            const taskText = taskInput.value.trim();
+
+            // Si la entrada esta en blanco muestra una notificacion
+            if (taskText === '') mostrarNotificacion("Debe ingresar una tarea");
+            else { // Si la entrada es válida
+                let repeated = checkExistence(taskList, taskText);
+
+                if (!repeated) {// Agrega la tarea solo si no está en la lista
+                    const li = document.createElement('li');
+                    li.innerHTML = `<input type="checkbox" onclick="toggleCompleted(this)"> 
+                    <span>${taskText}</span> <div class="btn_container btn_hover" onclick="removeTask(this)"><div class="btn_trash_bin"></div></div>`;
+                    taskList.appendChild(li);
+
+                    // Limpiar el campo de entrada
+                    taskInput.value = '';
+
+                    // Revisa si la tarea ya está en la lista
+                    let repeated = checkExistence(historialList, taskText);
+
+                    if (!repeated) {// Agrega la tarea solo si no está en la lista
+                        addToHistorial(taskText)
+                    }
+
+                    mostrarNotificacion("La tarea ha sido agregada");
+
+                } else {// Si la palabra ya está en la lista muestra la notificación
+                    mostrarNotificacion("La tarea ya se encuentra en la lista");
+                }
+                // Guarda en localStorage
+                saveData();
+
+            }
+
+        }
+
+        // Revisa si la tarea ya está en la lista
+        function checkExistence(list, txt) {
+
+            let repeated = false;
+
+            // Busca la tarea si ya está en la lista
+            list.querySelectorAll('li').forEach(item => {
+
+                let inList = item.querySelector('span').textContent;
+
+                if (txt.toLowerCase() === inList.toLowerCase()) repeated = true;
+            })
+            // Retorna falso o verdadero
+            return repeated;
+        }
+
+        // Al presionar ENTER agrega la tarea
+        taskInput.addEventListener("keypress", function (e) {
+
+            if (e.key == "Enter") addTask();
+        })
+
+        // Marcar la tarea como completa y tacha el texto
+        function toggleCompleted(checkbox) {
+
+            //const taskText = checkbox.nextElementSibling.textContent;
+
+            checkbox.nextElementSibling.style.textDecoration = checkbox.checked ? 'line-through' : 'none';
+        }
+
+
+        // Agrega la tarea al historial
+        function addToHistorial(taskText) {
+            // Agregar al historial
+            const historialItem = document.createElement('li');
+
+            historialItem.innerHTML = `<span class="span_h" onclick="addFromHistorial(this)">${taskText}</span>
+
+            <div class="btn_container btn_hover" onclick="removeTaskHist(this)"><div class="btn_trash_bin"></div></div>`;
+
+            historialList.appendChild(historialItem);
+        }
+
+        // Elimina la tarea
+        function removeTask(button) {
+            const li = button.parentElement;
+            const taskText = li.querySelector('span').textContent;
+
+            // Revisa si la palabra ya está en la lista
+            let repeated = checkExistence(historialList, taskText);
+
+            // Si la tarea no está en la lista del historial la agrega
+            if (!repeated) addToHistorial(taskText);
+
+            // Eliminar la tarea
+            taskList.removeChild(li);
+
+            // Guarda en localStorage
+            saveData();
+        }
+
+
+        // Muestra y oculta el historial
+        function toggleHistorial() {
+
+            const over_box = document.getElementsByClassName('over_box')[0];
+            const bg_historial = document.getElementById('bg_historial');
+
+            const historial = document.getElementById('historial');
+
+            const taskListItems = Array.from(historialList.querySelectorAll('li span'));
+            const historialListItems = Array.from(taskList.querySelectorAll('li span'));
+
+            // Itera sobre los elementos de taskList y marca en azul si no está en historialList
+            taskListItems.forEach(taskItem => {
+
+                const taskText = taskItem.textContent.toLowerCase();
+
+                const isInHistorial = historialListItems.some(historialItem => historialItem.textContent.toLowerCase() === taskText);
+
+                if (!isInHistorial) {
+
+                    taskItem.style.color = "red";
+
+                } else {
+
+                    taskItem.style.color = "white";
+                }
+            });
+
+            // Muestra y oculta el historial
+            historial.style.display = historial.style.display === 'block' ? 'none' : 'block';
+
+            // Muestra y oculta el contenedor del historial
+            over_box.style.visibility = over_box.style.visibility === 'visible' ? 'hidden' : 'visible'
+
+            // Muestra y oculta el fondo borroso
+            bg_historial.style.visibility = bg_historial.style.visibility === 'visible' ? 'hidden' : 'visible'
+
+            over_box.appendChild(historial);
+        }
+
+        // Agrega la tarea a la taskList desde la historialList
+        function addFromHistorial(span) {
+
+            const txtSpan = span.textContent;
+
+            let repeated = checkExistence(taskList, txtSpan);
+
+            if (!repeated) { // Agrega la tarea solo si no está en la lista
+                taskInput.value = txtSpan;
+                addTask()
+                toggleHistorial();
+            } else {
+                mostrarNotificacion("La tarea ya se encuentra en la lista")
+            }
+        }
+
+        function removeTaskHist(button) {
+            const li = button.parentElement;
+            const taskText = li.querySelector('span').textContent;
+            historialList.removeChild(li);
+            saveData();
+        }
+
+        function eliminaHistorial() {
+            localStorage.removeItem("data2");
+            // Eliminar del historial
+            historialList.innerHTML = '';
+        }
+
+        function mostrarNotificacion(text) {
+            const notificacion = document.createElement('div');
+            notificacion.id = "miNotificacion";
+            notificacion.className = "notificacion";
+            notificacion.textContent = text;
+
+            notificacion.classList.add('mostrar');
+            document.body.appendChild(notificacion);
+
+            // Ocultar la notificación después de 2.5 segundos (puedes ajustar este valor)
+            setTimeout(() => {
+
+                notificacion.remove();
+            }, 2500);
+        }
+
+        function saveData() {
+            localStorage.setItem("data1", taskList.innerHTML);
+            localStorage.setItem("data2", historialList.innerHTML);
+        }
+
+        function loadData() {
+            taskList.innerHTML = localStorage.getItem("data1");
+            historialList.innerHTML = localStorage.getItem("data2");
+        }
+
+        loadData();
+
+    </script>
+
+</body>
+
+</html>
